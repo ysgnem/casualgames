@@ -1,0 +1,17 @@
+{
+  "name": "casualgames",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "discord.js で動くお手軽ゲームボット",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "discord.js": "^14.21.0"
+  }
+}
