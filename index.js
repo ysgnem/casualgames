@@ -16,6 +16,18 @@ if (!token) {
 const PREFIX = "!";
 const GUESS_GAME_DURATION_MS = 5 * 60 * 1000;
 const guessGames = new Map();
+const allowedChannelIds = new Set(
+  (process.env.ALLOWED_CHANNEL_IDS ?? "")
+    .split(",")
+    .map((channelId) => channelId.trim())
+    .filter(Boolean),
+);
+
+if ([...allowedChannelIds].some((channelId) => !/^\d{17,20}$/.test(channelId))) {
+  console.error("ALLOWED_CHANNEL_IDS はカンマ区切りのDiscordチャンネルIDで指定してください。");
+  process.exit(1);
+}
+
 const slashCommands = [
   new SlashCommandBuilder()
     .setName("help")
@@ -156,8 +168,17 @@ function extendGuessGame(key, game) {
   scheduleGuessGameExpiration(key, game);
 }
 
+function isChannelAllowed(channelId) {
+  return allowedChannelIds.size === 0 || allowedChannelIds.has(channelId);
+}
+
 async function handleMessage(message) {
   if (message.author.bot || !message.content.startsWith(PREFIX)) {
+    return;
+  }
+
+  if (!isChannelAllowed(message.channelId)) {
+    await message.reply("このチャンネルではコマンドを使用できません。");
     return;
   }
 
@@ -248,6 +269,14 @@ async function handleMessage(message) {
 
 async function handleInteraction(interaction) {
   if (!interaction.isChatInputCommand()) {
+    return;
+  }
+
+  if (!isChannelAllowed(interaction.channelId)) {
+    await interaction.reply({
+      content: "このチャンネルではコマンドを使用できません。",
+      ephemeral: true,
+    });
     return;
   }
 

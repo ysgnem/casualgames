@@ -18,22 +18,25 @@ discord.js と JavaScript で作った、メッセージコマンドとスラッ
    npm install
    ```
 
-5. `DISCORD_TOKEN` 環境変数に Bot トークンを設定して起動します。
+5. `DISCORD_TOKEN` 環境変数に Bot トークンを設定して起動します。必要なら `ALLOWED_CHANNEL_IDS` に使用を許可するチャンネルIDを設定できます。
 
    PowerShell:
 
    ```powershell
    $env:DISCORD_TOKEN = "ここにBotトークン"
+   $env:ALLOWED_CHANNEL_IDS = "チャンネルID1,チャンネルID2"
    npm start
    ```
 
    macOS / Linux:
 
    ```sh
-   DISCORD_TOKEN="ここにBotトークン" npm start
+   DISCORD_TOKEN="ここにBotトークン" ALLOWED_CHANNEL_IDS="チャンネルID1,チャンネルID2" npm start
    ```
 
 > トークンはソースコードや公開リポジトリに書かないでください。
+
+`ALLOWED_CHANNEL_IDS` はカンマ区切りで複数指定できます。設定した場合、記載したチャンネル以外ではメッセージコマンド・スラッシュコマンドともに実行できません。未設定または空欄の場合は、すべてのチャンネルで使用できます。チャンネルIDはDiscordの開発者モードを有効にし、チャンネルを右クリックして「チャンネルIDをコピー」から取得できます。
 
 ## コマンド
 
